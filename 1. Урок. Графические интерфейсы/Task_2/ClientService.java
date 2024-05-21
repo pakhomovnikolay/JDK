@@ -39,7 +39,6 @@ public class ClientService extends JFrame implements IOServer<ServerService> {
     private JTextArea logViewer;
     private JTextField address, port, name, messages;
     private JPasswordField password;
-    private Timer timerControlConnect;
     private JPanel topPanel, bottomPanel, centerPanel;
     
     /**
@@ -57,7 +56,6 @@ public class ClientService extends JFrame implements IOServer<ServerService> {
         createStartWindow();
         createActionListener();
         setVisible(true);
-        timerRun();
 
         createClient(this);
         setVisible(true);
@@ -264,23 +262,6 @@ public class ClientService extends JFrame implements IOServer<ServerService> {
         JScrollPane scrollPane = new JScrollPane(centerPanel); 
         
         return scrollPane;
-    }
-
-
-    /**
-     * Метод создания таймера
-     */
-    private void timerRun() {
-        timerControlConnect = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (clientStatus == CLIENT_CONNECTED && !server.isRunning()) {
-                    setServerStatus(CLIENT_DISCONNECTED);
-                }
-            }
-        });
-
-        timerControlConnect.start();
     }
 
     /**
