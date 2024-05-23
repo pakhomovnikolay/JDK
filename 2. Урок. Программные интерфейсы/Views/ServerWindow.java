@@ -6,16 +6,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
-public class ServerWindow extends JFrame {
-
-    /** Высота окна */
-    private final int WINDOW_HEIGHT = 600;
-
-    /** Ширина окна */
-    private final int WINDOW_WIDHT = 500;
-
-    /** Наименование окна */
-    private final String TITLE_DEFAULT = "Чат (сервер)";
+public class ServerWindow extends JFrame implements IServerWindow {
 
     /** Экземпляр сервера */
     private Server server;
@@ -105,7 +96,7 @@ public class ServerWindow extends JFrame {
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                server.startServer();
+                startServer();
             }
         });
 
@@ -113,7 +104,7 @@ public class ServerWindow extends JFrame {
         btnStop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                server.stopServer();
+                stopServer();
             }
         });
 
@@ -142,20 +133,22 @@ public class ServerWindow extends JFrame {
         server.writeLog("Произведена очистка журнала");
     }
 
-    /**
-     * Метод добавления сообщения в журнал
-     * 
-     * @param message
-     */
+    @Override
+    public void startServer() {
+        server.startServer();
+    }
+
+    @Override
+    public void stopServer() {
+        server.stopServer();
+    }
+
+    @Override
     public void appenedMessage(String message) {
         logViewer.append(message);
     }
 
-    /**
-     * Метод обновления состояния сервера
-     * 
-     * @param message
-     */
+    @Override
     public void updateServerStatus() {
         updateStateControlElement();
     }

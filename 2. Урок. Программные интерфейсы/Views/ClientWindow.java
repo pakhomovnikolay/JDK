@@ -17,16 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ClientWindow extends JFrame {
-
-    /** Высота окна */
-    private final int WINDOW_HEIGHT = 600;
-
-    /** Ширина окна */
-    private final int WINDOW_WIDHT = 500;
-
-    /** Наименование окна */
-    private final String TITLE_DEFAULT = "Чат (клиент)";
+public class ClientWindow extends JFrame implements IClientWindow {
 
     /** Экземпляр клиента */
     private Client client;
@@ -95,8 +86,7 @@ public class ClientWindow extends JFrame {
         btnConnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setFieldsClient();
-                client.requestConnect();
+                requestConnect();
             }
         });
 
@@ -104,8 +94,7 @@ public class ClientWindow extends JFrame {
         btnSendMessage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.sendMessage(messages.getText());
-                messages.setText("");
+                sendMessage();
             }
         });
 
@@ -120,8 +109,7 @@ public class ClientWindow extends JFrame {
         /** Слушатель события завершения ввода сообщения */
         messages.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                client.sendMessage(messages.getText());
-                messages.setText("");
+                sendMessage();
             };
         });
 
@@ -129,7 +117,7 @@ public class ClientWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                client.requestDisconnect();
+                requestConnect();
             }
         });
     }
@@ -220,20 +208,29 @@ public class ClientWindow extends JFrame {
         client.writeLog("Произведена очистка журнала");
     }
 
-    /**
-     * Метод добавления сообщения в журнал
-     * 
-     * @param message
-     */
+    @Override
+    public void requestConnect() {
+        setFieldsClient();
+        client.requestConnect();
+    }
+
+    @Override
+    public void sendMessage() {
+        client.sendMessage(messages.getText());
+        messages.setText("");
+    }
+
+    @Override
+    public void requestDisconnect() {
+        client.requestDisconnect();
+    }
+
+    @Override
     public void appenedMessage(String message) {
         logViewer.append(message);
     }
 
-    /**
-     * Метод обновления состояния клиента
-     * 
-     * @param message
-     */
+    @Override
     public void updateClientStatus() {
         updateStateControlElement();
     }
